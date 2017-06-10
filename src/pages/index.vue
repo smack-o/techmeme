@@ -1,6 +1,10 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div class="index">
+    <div class="bar">
+      <div class="item">编辑推荐</div>
+      <div class="item">城市攻略</div>
+      <div class="item">我的收藏</div>
+    </div>
   </div>
 </template>
 
@@ -15,7 +19,16 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .bar{
+    display: flex;
+    height: 100px;
+    border-bottom: 1px solid #e9e9e9;
+  }
+  .bar .item{
+    flex: 1;
+    font-size: 2.5em;
+    text-align: center;
+    line-height: 100px;
+  }
 </style>
