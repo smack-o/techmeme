@@ -1,6 +1,8 @@
 <template>
-  <div class="hello">
-
+  <div>
+    <div class="hello">
+      {{msg}}
+    </div>
   </div>
 </template>
 
@@ -9,11 +11,13 @@ export default {
   name: 'hello',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: 'Welcome to hello1',
     };
   },
 };
 </script>
 <style scoped>
-
+.hello{
+  font-size: 3em;
+}
 </style>
