@@ -41,6 +41,7 @@ export default {
 }
 .bar .item i{
   font-style: normal;
+  font-weight: bolder;
 }
 .router-link-active i{
   border-bottom: 0.2em solid black;
