@@ -1,0 +1,41 @@
+<style type="less">
+  .group {}
+</style>
+<template>
+  <view class="recommend-wrapper">
+    <swiper
+      indicator-dots
+      bindchange="bindchangeTag"
+    >
+      <block wx:for="{{list}}" wx:key="index">
+        <swiper-item>
+          <!-- <image src="'/img/' + item.pictures[0]" class="slide-image"/> -->
+          {{'/img/' + item.pictures[0]}}
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  // import { connect } from 'wepy-redux'
+  // @connect({
+  //   list (state) {
+  //     return state.restaurant.list
+  //   }
+  // })
+  export default class Group extends wepy.component {
+    props = {
+      list: []
+    }
+
+    components = {
+    }
+    methods = {
+      tap () {
+        this.grouplist.name = `Parent Random(${Math.random()})`
+        console.log(`Clicked Group ${this.$index}, ID is ${this.grouplist.id}`)
+      }
+    }
+  }
+</script>
