@@ -1,12 +1,6 @@
 <style lang="less">
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+@import "./assets/global.less";
+
 </style>
 
 <script>
@@ -15,6 +9,7 @@ import 'wepy-async-function'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
+import { host } from './utils'
 
 const store = configStore()
 setStore(store)
@@ -27,7 +22,7 @@ export default class extends wepy.app {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
+      navigationBarTitleText: '探索',
       navigationBarTextStyle: 'black'
     }
   }
@@ -39,6 +34,24 @@ export default class extends wepy.app {
   constructor () {
     super()
     this.use('requestfix')
+    this.intercept('request', {
+      config (p) {
+        // p.timestamp = +new Date()
+        p.url = host + p.url
+        return p
+      },
+      success (p) {
+        // console.log('request success: ', p)
+        return p
+      },
+      fail (p) {
+        // console.log('request fail: ', p)
+        return p
+      },
+      complete (p) {
+        // console.log('request complete: ', p)
+      }
+    })
   }
 
   onLaunch() {
