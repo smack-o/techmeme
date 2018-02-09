@@ -3,8 +3,8 @@ const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
 
 // development or production host
 const hosts = {
-  dev: 'http://localhost:3000',
-  prod: 'https://prod.com'
+  dev: 'http://localhost:8791',
+  prod: 'https://tansuo.smackgg.cn'
 }
 
 module.exports = {
