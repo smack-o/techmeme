@@ -37,18 +37,6 @@
   @connect({
     list (state) {
       return state.restaurant.list
-    },
-    tList (state) {
-      return [{
-        name: '精选餐厅',
-        list: state.restaurant.list
-      }, {
-        name: '好去处',
-        list: state.restaurant.list
-      }, {
-        name: '测试测试',
-        list: state.restaurant.list
-      }]
     }
   }, {
     getRestaurantList
