@@ -17,7 +17,7 @@
           <view class="moudle__title--right">查看全部<span class="right-block"></span></view>
         </view>
         <view class="moudle-content">
-          <view class="moudle-content__item" wx:for="{{content.articles}}" wx:key="index">
+          <view @tap="goToDetail({{item._id}})" class="moudle-content__item" wx:for="{{content.articles}}" wx:key="index">
             <view class="item-wrapper">
               <view style="background-image:url({{item.pictures[0].url}});" alt="" class="content-image"></view>
               <view class="item-bottom">
@@ -44,10 +44,15 @@
       list: []
     }
 
+    events = {
+    }
+
     methods = {
-      tap () {
-        this.grouplist.name = `Parent Random(${Math.random()})`
-        console.log(`Clicked Group ${this.$index}, ID is ${this.grouplist.id}`)
+      goToDetail(id) {
+        console.log(id)
+        this.$root.$navigate('./article', {
+          id
+        })
       }
     }
   }

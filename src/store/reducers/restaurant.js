@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { GET_LIST } from '../types/restaurant'
+import { GET_LIST, GET_ARTICLE } from '../types/restaurant'
 
 export default handleActions({
   [GET_LIST] (state, action) {
@@ -8,7 +8,15 @@ export default handleActions({
       ...state,
       list: action.payload.data
     }
+  },
+  [GET_ARTICLE] (state, action) {
+    console.log(action.payload)
+    return {
+      ...state,
+      article: action.payload.data
+    }
   }
 }, {
-  list: []
+  list: [],
+  article: null
 })

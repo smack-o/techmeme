@@ -1,0 +1,62 @@
+<style lang="less">
+  @import '../assets/var.less';
+</style>
+<template>
+  <view class="container">
+    1111
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { getArticle } from '@/store/actions'
+  import { connect } from 'wepy-redux'
+
+  @connect({
+    list (state) {
+      return state.restaurant.list
+    },
+    tList (state) {
+      return [{
+        name: '精选餐厅',
+        list: state.restaurant.list
+      }, {
+        name: '好去处',
+        list: state.restaurant.list
+      }, {
+        name: '测试测试',
+        list: state.restaurant.list
+      }]
+    }
+  }, {
+    getArticle
+  })
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '探索'
+    }
+    components = {
+    }
+    data = {
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+    }
+
+    events = {
+    }
+
+    onLoad(params, data) {
+      this.methods.getArticle({
+        id: params.id
+      })
+    }
+  }
+</script>
