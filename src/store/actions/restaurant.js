@@ -4,7 +4,7 @@ import wepy from 'wepy'
 export const getRestaurantList = createAction(GET_LIST, () => {
   return new Promise((resolve) => {
     wepy.request({
-      url: '/api/restaurant/list',
+      url: '/api/topic/homelist',
       success (response) {
         resolve(response.data)
       }

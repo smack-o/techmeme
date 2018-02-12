@@ -23,7 +23,7 @@
       <span @tap="onNavClick({{index}})" class="{{ index === navActive ? 'active' : '' }}" wx:for="{{navList}}" wx:key="{{index}}">{{navList[index]}}</span>
     </view>
     <view class="wrapper">
-      <recommend :list.sync="tList"></recommend>
+      <recommend :list.sync="list"></recommend>
     </view>
   </view>
 </template>

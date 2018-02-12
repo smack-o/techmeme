@@ -6,7 +6,7 @@ export default handleActions({
     console.log('reducers', state, action)
     return {
       ...state,
-      list: action.payload.data.list
+      list: action.payload.data
     }
   }
 }, {
