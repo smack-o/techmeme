@@ -69,7 +69,7 @@
     events = {
     }
 
-    onLoad() {
+    onShow() {
       this.methods.getRestaurantList()
     }
   }
