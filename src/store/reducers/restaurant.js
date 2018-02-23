@@ -18,5 +18,5 @@ export default handleActions({
   }
 }, {
   list: [],
-  article: null
+  article: {}
 })

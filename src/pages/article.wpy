@@ -1,9 +1,135 @@
 <style lang="less">
   @import '../assets/var.less';
+  .nav-image {
+    width: 100%;
+    display: block;
+  }
+  .title {
+    margin: 0 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid @ColorBorder;
+    .name {
+      font-size: 30px;
+      line-height: 42px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .collect-icon {
+        width: 20px;
+      }
+    }
+    .name-en {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+  .reason {
+    padding: 15px;
+    font-size: 18px;
+    color: fade(@ColorBlack, 60%);
+    .reason-title {
+      font-size: 20px;
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 10px;
+      color: @ColorBlack;
+    }
+  }
+  .recommend {
+    margin: 0 15px 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid @ColorBorder;
+    border-top: 1px solid @ColorBorder;
+    font-size: 18px;
+  }
+  .info {
+    margin: 0 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid @ColorBorder;
+    line-height: 28px;
+    .info__title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .info__sub-title {
+      font-size: 18px;
+      color: fade(@ColorBlack, 60%)
+    }
+  }
+  .bottom {
+    margin: 20px 15px 0;
+    padding-bottom: 20px;
+    font-size: 20px;
+    color: @ColorGray;
+  }
+  .map {
+    width: 100%;
+    height: 276px;
+  }
 </style>
 <template>
   <view class="container">
-    1111
+    <view>
+      <swiper
+        autoplay
+        circular
+        style="height: 276px"
+      >
+        <block wx:for="{{article.pictures}}" wx:key="index">
+          <swiper-item>
+            <image src="{{item.url}}" mode="widthFix" class="nav-image"/>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="title">
+      <view class="name">
+        <text>{{article.name}}</text>
+        <image src="../assets/img/collect_icon.png" mode="widthFix" class="collect-icon"/>
+      </view>
+      <view class="name-en">
+        <text>{{article.name_en}}</text>
+      </view>
+    </view>
+    <view class="reason">
+      <text class="reason-title">为何推荐</text>
+      <text>{{article.reason}}</text>
+    </view>
+    <view class="recommend">
+      <view>写评论</view>
+      <view>推荐其他人去</view>
+    </view>
+    <!-- <map
+      longitude="{{article.longitude}}"
+      latitude="{{article.latitude}}"
+      markers="{{markers}}"
+      style="width: 100%; height: 276px;"
+    ></map> -->
+    <map
+      longitude="116.450092"
+      latitude="39.924758"
+      markers="{{markers}}"
+      style="width: 100%; height: 276px;"
+      show-location
+      scale="14"
+      controls="{{controls}}"
+      @tap="onMapClick"
+    ></map>
+    <view class="info">
+      <view class="info__title">地址</view>
+      <view class="info__sub-title">{{article.address}}</view>
+    </view>
+    <view class="info">
+      <view class="info__title">电话</view>
+      <view class="info__sub-title">{{article.contact}}</view>
+    </view>
+    <view class="info">
+      <view class="info__title">营业时间</view>
+      <view class="info__sub-title">{{handleTime}}</view>
+    </view>
+    <view class="bottom">有错误信息？来告诉我们吧</view>
   </view>
 </template>
 
@@ -11,22 +137,16 @@
   import wepy from 'wepy'
   import { getArticle } from '@/store/actions'
   import { connect } from 'wepy-redux'
-
+  import { dateFormat } from '@/utils'
+  console.log(dateFormat('2018-01-01T04:30:00.000Z', 'HH:mm:ss'))
   @connect({
-    list (state) {
-      return state.restaurant.list
-    },
-    tList (state) {
-      return [{
-        name: '精选餐厅',
-        list: state.restaurant.list
-      }, {
-        name: '好去处',
-        list: state.restaurant.list
-      }, {
-        name: '测试测试',
-        list: state.restaurant.list
-      }]
+    article (state) {
+      const data = state.restaurant.article
+      const lngLat = data.lng_lat ? data.lng_lat.split(',') : [1, 1]
+      data.longitude = lngLat[0]
+      data.latitude = lngLat[1]
+      console.log(data.lng_lat)
+      return data
     }
   }, {
     getArticle
@@ -39,22 +159,64 @@
     components = {
     }
     data = {
+      controls: [{
+        id: 1,
+        iconPath: '../assets/img/navigation_icon.png',
+        position: {
+          left: 20,
+          top: 20,
+          width: 36,
+          height: 36
+        },
+        clickable: true,
+        dateFormat
+      }]
     }
 
     computed = {
-      now () {
-        return +new Date()
+      handleTime (businessHours) {
+        if (!this.article || !this.article.business_hours) return ''
+        return `${dateFormat(new Date(this.article.business_hours[0]), 'HH:mm:ss')} - ${dateFormat(new Date(this.article.business_hours[1]), 'HH:mm:ss')}`
+      },
+      markers () {
+        if (!this.article) {
+          return []
+        }
+        return [{
+          id: 0,
+          latitude: this.article.latitude,
+          longitude: this.article.longitude,
+          width: 50,
+          height: 50
+        }]
+      },
+      location () {
+        if (!this.article) {
+          return null
+        }
+        return {
+          latitude: Number(this.article.latitude),
+          longitude: Number(this.article.longitude),
+          scale: 18,
+          name: this.article.name,
+          address: this.article.address
+        }
       }
     }
 
     methods = {
+      onMapClick () {
+        if (!this.location) {
+          return
+        }
+        wepy.openLocation(this.location)
+      }
     }
 
     events = {
     }
-
-    onLoad(params, data) {
-      this.methods.getArticle({
+    async onLoad(params, data) {
+      await this.methods.getArticle({
         id: params.id
       })
     }
