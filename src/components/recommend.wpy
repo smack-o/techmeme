@@ -14,7 +14,7 @@
       <view class="moudle" wx:for="{{list}}" wx:key="index" wx:for-item="content">
         <view class="moudle__title">
           <view class="moudle__title--left">{{content.name}}</view>
-          <view class="moudle__title--right">查看全部<span class="right-block"></span></view>
+          <view class="moudle__title--right" @tap="goToTopic({{content._id}})">查看全部<span class="right-block"></span></view>
         </view>
         <view class="moudle-content">
           <view @tap="goToDetail({{item._id}})" class="moudle-content__item" wx:for="{{content.articles}}" wx:key="index">
@@ -48,9 +48,13 @@
     }
 
     methods = {
-      goToDetail(id) {
-        console.log(id)
+      goToDetail (id) {
         this.$root.$navigate('./article', {
+          id
+        })
+      },
+      goToTopic (id) {
+        this.$root.$navigate('./articles', {
           id
         })
       }
