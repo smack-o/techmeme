@@ -22,7 +22,6 @@ export default handleActions({
     }
   },
   [TOPIC_ARTICLES_LOADING] (state, action) {
-    console.log(111)
     return {
       ...state,
       articlesLoading: true

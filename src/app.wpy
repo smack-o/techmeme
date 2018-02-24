@@ -56,21 +56,22 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    this.testAsync()
+    // this.testAsync()
+    this.getUserInfo()
   }
-
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
-  }
+  //
+  // sleep (s) {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve('promise resolved')
+  //     }, s * 1000)
+  //   })
+  // }
+  //
+  // async testAsync () {
+  //   const data = await this.sleep(3)
+  //   console.log(data)
+  // }
 
   getUserInfo(cb) {
     const that = this
@@ -80,6 +81,7 @@ export default class extends wepy.app {
     wepy.getUserInfo({
       success (res) {
         that.globalData.userInfo = res.userInfo
+        console.log(res.userInfo)
         cb && cb(res.userInfo)
       }
     })

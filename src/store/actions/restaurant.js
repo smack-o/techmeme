@@ -26,7 +26,6 @@ export const getArticle = createAction(GET_ARTICLE, (data) => {
 })
 
 export const getTopicArticles = createAction(GET_TOPIC_ARTICLES, (data) => {
-  console.log(store)
   store.dispatch({
     type: 'TOPIC_ARTICLES_LOADING'
   })

@@ -138,14 +138,13 @@
   import { getArticle } from '@/store/actions'
   import { connect } from 'wepy-redux'
   import { dateFormat } from '@/utils'
-  console.log(dateFormat('2018-01-01T04:30:00.000Z', 'HH:mm:ss'))
   @connect({
     article (state) {
       const data = state.restaurant.article
       const lngLat = data.lng_lat ? data.lng_lat.split(',') : [1, 1]
       data.longitude = lngLat[0]
       data.latitude = lngLat[1]
-      console.log(data.lng_lat)
+      // console.log(data.lng_lat)
       return data
     }
   }, {
