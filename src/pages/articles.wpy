@@ -1,0 +1,106 @@
+<style lang="less">
+  @import '../assets/var.less';
+  .container {
+    padding: 16px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    .content {
+      width: ~"calc((100vw - 20px) / 3)";
+      padding: 0 5px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      .content-image {
+        border-radius: 8px 8px 0 0;
+        background: @ColorImageBlock;
+        width: ~"calc((100vw - 50px) / 3)";
+        height: ~"calc((100vw - 50px) / 3)";
+      }
+      .item-bottom {
+        border-radius: 0 0 8px 8px;
+        font-size: 11px;
+        line-height: 13px;
+        padding: 3px 5px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+        .item-bottom__price {
+          font-size: 9px;
+          color: @ColorGray;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view @tap="goToDetail({{item._id}})" class="content" wx:for="{{articles}}" wx:key="index">
+      <view class="item-wrapper">
+        <view style="background-image:url({{item.pictures[0].url}});" alt="" class="content-image"></view>
+        <view class="item-bottom">
+          <view class="item-bottom__name">{{item.name}}</view>
+          <view class="item-bottom__price">￥ {{item.price}}/位</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { getTopicArticles } from '@/store/actions'
+  import { connect } from 'wepy-redux'
+  @connect({
+    topic: state => state.restaurant.topic,
+    articles: state => state.restaurant.articles,
+    articlesLoading: state => state.restaurant.articlesLoading
+  }, {
+    getTopicArticles
+  })
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '探索'
+    }
+    components = {
+    }
+    data = {
+    }
+
+    watch = {
+      loading (newVal, oldVal) {
+        if (newVal) {
+          wepy.showLoading({
+            title: '加载中...',
+            mask: true
+          })
+        } else {
+          wepy.hideLoading()
+        }
+      }
+    }
+    computed = {
+      loading () {
+        return this.articlesLoading
+      }
+    }
+
+    methods = {
+      goToDetail (id) {
+        this.$root.$navigate('./article', {
+          id
+        })
+      }
+    }
+
+    events = {
+    }
+    async onLoad(params, data) {
+      await this.methods.getTopicArticles({
+        id: params.id
+      })
+      wepy.setNavigationBarTitle({
+        title: this.topic.name
+      })
+    }
+  }
+</script>
