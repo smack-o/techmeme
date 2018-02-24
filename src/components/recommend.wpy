@@ -48,10 +48,11 @@
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
     .item-wrapper {
-      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .10);
+      // box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .10);
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
       margin: 2px 0;
       width: 100%;
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
     }
     .moudle-content__item {
