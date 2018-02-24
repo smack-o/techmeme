@@ -108,14 +108,15 @@
       style="width: 100%; height: 276px;"
     ></map> -->
     <map
-      longitude="116.450092"
-      latitude="39.924758"
+      longitude="{{location.longitude}}"
+      latitude="{{location.latitude}}"
       markers="{{markers}}"
       style="width: 100%; height: 276px;"
       show-location
       scale="14"
       controls="{{controls}}"
       @tap="onMapClick"
+      @controltap="onControlTap"
     ></map>
     <view class="info">
       <view class="info__title">地址</view>
@@ -160,12 +161,22 @@
     data = {
       controls: [{
         id: 1,
+        iconPath: '../assets/img/mask.png',
+        position: {
+          left: 0,
+          top: 0,
+          width: 1000,
+          height: 1000
+        },
+        clickable: true
+      }, {
+        id: 2,
         iconPath: '../assets/img/navigation_icon.png',
         position: {
           left: 20,
           top: 20,
-          width: 36,
-          height: 36
+          width: 93,
+          height: 30
         },
         clickable: true,
         dateFormat
@@ -185,13 +196,17 @@
           id: 0,
           latitude: this.article.latitude,
           longitude: this.article.longitude,
-          width: 50,
-          height: 50
+          iconPath: '../assets/img/position_icon.png',
+          width: 32,
+          height: 32
         }]
       },
       location () {
         if (!this.article) {
-          return null
+          return {
+            latitude: '116.450092',
+            longitude: '39.924758'
+          }
         }
         return {
           latitude: Number(this.article.latitude),
@@ -204,8 +219,14 @@
     }
 
     methods = {
-      onMapClick () {
-        if (!this.location) {
+      onMapClick (e) {
+        // if (!this.location) {
+        //   return
+        // }
+        // wepy.openLocation(this.location)
+      },
+      onControlTap (e) {
+        if (!this.location || e.controlId === 1) {
           return
         }
         wepy.openLocation(this.location)
