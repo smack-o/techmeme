@@ -197,8 +197,8 @@
           latitude: this.article.latitude,
           longitude: this.article.longitude,
           iconPath: '../assets/img/position_icon.png',
-          width: 32,
-          height: 32
+          width: 28,
+          height: 36
         }]
       },
       location () {
