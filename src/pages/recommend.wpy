@@ -203,14 +203,14 @@
     </view>
     <view class="doyen">
       <view class="doyen-reason">
-        <view class="doyen-reason-title">达人推荐</view>
+        <view class="doyen-reason-title">{{type === 0 ? '编辑推荐' : '达人推荐'}}</view>
         <view class="doyen-reason-author">编者：{{recommend.referee.name}}</view>
       </view>
       <image src="{{recommend.referee.avatar[0].url}}" mode="widthFix" class="doyen-icon"/>
     </view>
     <view class="about">
       <view class="about-box">
-        <text class="about-box-title">关于 {{recommend.referee.name}}</text>
+        <text class="about-box-title">{{ type === 0 ? '推荐理由' : '关于' + recommend.referee.name }}</text>
         {{recommend.reason}}
       </view>
     </view>
@@ -272,7 +272,7 @@
   import { getRecommend } from '@/store/actions'
 
   import { connect } from 'wepy-redux'
-
+  const TITLES = ['达人推荐', '城市攻略']
   @connect({
     recommend (state) {
       return state.recommend.recommend
@@ -287,6 +287,7 @@
     components = {
     }
     data = {
+      type: 0
     }
 
     computed = {
@@ -305,6 +306,10 @@
     async onLoad(params, data) {
       await this.methods.getRecommend({
         id: params.id
+      })
+      this.type = params.type
+      wepy.setNavigationBarTitle({
+        title: TITLES[params.type || 0]
       })
     }
   }

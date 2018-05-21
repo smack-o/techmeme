@@ -23,36 +23,49 @@
     <view class="nav">
       <span @tap="onNavClick({{index}})" class="{{ index === navActive ? 'active' : '' }}" wx:for="{{navList}}" wx:key="{{index}}">{{navList[index]}}</span>
     </view>
-    <swiper
-      indicator-dots
-      bindchange="bindchangeTag"
-    >
-      <swiper-item wx:for="{{recommends}}" wx:key="{{index}}">
-        <image src="{{item.pictures[0].url}}"  @tap="goToRecommend({{item._id}})" class="slide-image"/>
-      </swiper-item>
-    </swiper>
-    <view class="wrapper">
-      <recommend :list.sync="list"></recommend>
+    <view wx:if="{{navActive === 0}}">
+      <swiper
+        indicator-dots
+        bindchange="bindchangeTag"
+      >
+        <swiper-item wx:for="{{recommends}}" wx:key="{{index}}">
+          <image src="{{item.pictures[0].url}}"  @tap="goToRecommend({{item._id}})" class="slide-image"/>
+        </swiper-item>
+      </swiper>
+      <view class="wrapper">
+        <recommend :list.sync="list"></recommend>
+      </view>
     </view>
   </view>
+  <view wx:if="{{navActive === 1}}">
+    <view class="wrapper">
+      <cityguid :list.sync="guidList"></cityguid>
+    </view>
+  </view>
+</view>
 </template>
 
 <script>
   import wepy from 'wepy'
   import Recommend from '@/components/recommend'
-  import { getRestaurantList, getRecommendList } from '@/store/actions'
+  import CityGuids from '@/components/cityGuids'
+  import { getRestaurantList, getRecommendList, getCityGuidList } from '@/store/actions'
   import { connect } from 'wepy-redux'
 
   @connect({
     list (state) {
       return state.restaurant.list
     },
+    guidList (state) {
+      return state.recommend.guidList
+    },
     recommends (state) {
       return state.recommend.list
     }
   }, {
     getRestaurantList,
-    getRecommendList
+    getRecommendList,
+    getCityGuidList
   })
 
   export default class Index extends wepy.page {
@@ -60,7 +73,8 @@
       navigationBarTitleText: '探索'
     }
     components = {
-      recommend: Recommend
+      recommend: Recommend,
+      cityguid: CityGuids
     }
     data = {
       navList: ['编辑推荐', '城市攻略'],
@@ -76,12 +90,24 @@
     methods = {
       onNavClick (index) {
         this.navActive = index
+        if (index === 0) {
+          this.methods.fetchRecommendHandler.bind(this)()
+        } else if (index === 1) {
+          this.methods.fetchCityGuidHandler.bind(this)()
+        }
       },
       goToRecommend (id) {
         this.$root.$navigate('./recommend', {
           id,
           type: 0
         })
+      },
+      fetchRecommendHandler () {
+        this.methods.getRestaurantList()
+        this.methods.getRecommendList()
+      },
+      fetchCityGuidHandler () {
+        this.methods.getCityGuidList()
       }
     }
 
@@ -89,8 +115,9 @@
     }
 
     onShow() {
-      this.methods.getRestaurantList()
-      this.methods.getRecommendList()
+      this.methods.fetchRecommendHandler.bind(this)()
+      // this.methods.getRestaurantList()
+      // this.methods.getRecommendList()
     }
   }
 </script>

@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { GET_LIST, GET_RECOMMENT } from '../types/recommend'
+import { GET_LIST, GET_RECOMMENT, GET_GUID_LIST } from '../types/recommend'
 
 export default handleActions({
   [GET_LIST] (state, action) {
@@ -13,8 +13,15 @@ export default handleActions({
       ...state,
       recommend: action.payload.data
     }
+  },
+  [GET_GUID_LIST] (state, action) {
+    return {
+      ...state,
+      guidList: action.payload.data.list
+    }
   }
 }, {
+  guidList: [],
   list: [],
   recommend: {}
 })

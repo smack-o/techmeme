@@ -1,0 +1,94 @@
+<style lang="less">
+  @import '../assets/var.less';
+  .container {
+    padding: 16px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    .content {
+      width: ~"calc((100vw - 20px) / 2)";
+      padding: 0 5px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      .item-title {
+        position: absolute;
+        bottom: 2px;
+        left: 8px;
+        font-size: 18px;
+        color: @ColorWhite;
+      }
+      .content-image {
+        position: relative;
+        border-radius: 8px 8px 0 0;
+        background: @ColorImageBlock;
+        width: ~"calc((100vw - 50px) / 2)";
+        height: ~"calc((100vw - 50px) / 2)";
+        background-size: cover;
+      }
+      .item-bottom {
+        border-radius: 0 0 8px 8px;
+        font-size: 10px;
+        line-height: 14px;
+        padding: 3px 8px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+        .item-bottom__price {
+          line-height: 18px;
+          font-size: 13px;
+          color: @ColorGray;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="content" wx:for="{{list}}" wx:key="index" @tap="goToDetail({{item._id}})">
+      <view class="item-wrapper">
+        <view style="background-image:url({{item.pictures[0].url}});" alt="" class="content-image">
+          <view class="item-title">
+            {{item.title}}
+          </view>
+        </view>
+        <view class="item-bottom">
+          <view class="item-bottom__name">{{item.referee.name}}</view>
+          <view class="item-bottom__price">{{item.subtitle}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Group extends wepy.component {
+    props = {
+      list: []
+    }
+
+    data = {
+      topicActive: 0
+    }
+
+    events = {
+    }
+
+    methods = {
+      goToDetail (id) {
+        this.$root.$navigate('./recommend', {
+          id,
+          type: 1
+        })
+      },
+      // goToTopic (id) {
+      //   this.$root.$navigate('./articles', {
+      //     id
+      //   })
+      // },
+      onTopicClick (index) {
+        this.topicActive = index
+      }
+    }
+  }
+</script>
