@@ -1,0 +1,311 @@
+<style lang="less">
+  @import '../assets/var.less';
+  page {
+    margin-bottom: 90px;
+  }
+  .nav-image {
+    width: 100%;
+    height: 58px;
+    display: block;
+  }
+  .title {
+    margin: 0 15px;
+    padding: 20px 0;
+    .name {
+      font-size: 30px;
+      line-height: 42px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .collect-icon {
+        width: 20px;
+      }
+    }
+    .name-en {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+  .doyen {
+    display: flex;
+    margin: 0 15px;
+    .doyen-reason{
+      flex: 1;
+      .doyen-reason-title{
+        font-size: 18px;
+      }
+      .doyen-reason-author{
+        font-size: 17px;
+      }
+    }
+    .doyen-icon{
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+    }
+  }
+  .about{
+    margin: 0 15px;
+    padding-top: 25px;
+    .about-box{
+      border: 1px solid @ColorBorder;
+      padding: 27px 4px;
+      font-size: 15px;
+      position: relative;
+      .about-box-title{
+        font-size: 12px;
+        top: -10px;
+        left: 10px;
+        position: absolute;
+        display: block;
+        padding: 0px 4px;
+        background-color: #ffffff
+      }
+    }
+  }
+  .yougo{
+    font-size: 20px;
+    margin: 0 15px;
+    padding-top: 27px;
+  }
+  .list{
+    padding-top: 22px;
+    margin: 0 15px;
+    .list-header{
+      display: flex;
+      position: relative;
+    }
+    .list-header-arrow{
+        width: 10px;
+        height: 19px;
+        top: 2px;
+        right: 0px;
+        position: absolute;
+    }
+    .list-header-image{
+      width: 66px;
+      height: 66px;
+      margin-right: 20px;
+    }
+    .list-header-address{
+      flex: 1;
+      .list-header-address-name{
+        color: #1E1F22;
+        font-size: 20px;
+      }
+      .list-header-address-detail{
+        color: #9B9B9B;
+        font-size: 11px;
+      }
+    }
+    .list-text{
+      font-size: 14px;
+      padding: 10px 0px;
+      border-bottom: 1px solid #CFCCCC;
+    }
+  }
+  .footer{
+    height: 66px;
+    background: #f9f9f9;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right:0px;
+    padding: 18px 14px;
+    box-sizing: border-box;
+    z-index: 99;
+    input{
+      height: 30px;
+      border: 1px solid #9B9B9B;
+      color: #888888;
+      font-size: 13px;
+      border-radius: 14px;
+      padding: 2px 6px;
+      box-sizing: border-box;
+    }
+  }
+  .comments{
+    margin: 0 15px;
+    .comments-title{
+      font-size: 30px;
+      padding: 20px 0px;
+    }
+    .comments-list{
+      display: flex;
+      .comments-list-author{
+        width: 40px;
+        height: 40px;
+        margin-right: 7px;
+      border-radius: 50%;
+      }
+      .comments-list-main{
+        flex: 1;
+        .comments-list-main-name{
+          color: #1E1F22;
+          font-size: 14px;
+        }
+        .comments-list-main-content{
+          color: #1E1F22;
+          font-size: 12px;
+        }
+        .comments-list-main-footer{
+          position: relative;
+          height: 20px;
+          margin-bottom: 10px;
+        }
+        .comments-list-main-footer-time{
+          color: #9b9b9b;
+          font-size: 10px;
+          position: absolute;
+          bottom: 4px;
+        }
+        .comments-list-main-footer-handle{
+          position: absolute;
+          right: 4px;
+          bottom: 4px;
+          color: #888888;
+          font-size: 11px;
+          .comments-list-main-footer-handle-xin{
+            width: 11px;
+            height: 11px;
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
+
+</style>
+<template>
+  <view class="container">
+    <view>
+      <swiper
+        autoplay
+        circular
+        style="height: 276px"
+      >
+        <block wx:for="{{recommend.pictures}}" wx:key="index">
+          <swiper-item>
+            <image src="{{item.url}}" mode="widthFix" class="nav-image"/>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="title">
+      <view class="name">
+        <text>{{recommend.title}}</text>
+        <image src="../assets/img/send.png" mode="widthFix" class="collect-icon"/>
+      </view>
+      <view class="name-en">
+        <text>{{recommend.subtitle}}</text>
+      </view>
+    </view>
+    <view class="doyen">
+      <view class="doyen-reason">
+        <view class="doyen-reason-title">达人推荐</view>
+        <view class="doyen-reason-author">编者：{{recommend.referee.name}}</view>
+      </view>
+      <image src="{{recommend.referee.avatar[0].url}}" mode="widthFix" class="doyen-icon"/>
+    </view>
+    <view class="about">
+      <view class="about-box">
+        <text class="about-box-title">关于 {{recommend.referee.name}}</text>
+        {{recommend.reason}}
+      </view>
+    </view>
+    <view class="yougo">
+      我推荐你去
+    </view>
+    <view class="list" wx:for="{{recommend.articles}}" wx:key="index" @tap="goToDetail({{item._id}})">
+      <view class="list-header">
+        <image class="list-header-image" src="{{item.pictures[0].url}}"/>
+        <view class="list-header-address">
+          <view class="list-header-address-name">{{item.name}}</view>
+          <view class="list-header-address-detail">{{item.address}}</view>
+        </view>
+        <image class="list-header-arrow" src="../assets/img/arrow_right_icon.png"/>
+      </view>
+      <view class="list-text">{{item.reason}}</view>
+    </view>
+
+    <view class="footer">
+      <input placeholder="添加评论…" />
+    </view>
+
+    <view class="comments">
+      <view class="comments-title">
+        大家的评论
+      </view>
+      <view class="comments-list">
+        <image class="comments-list-author" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/120/h/120"/>
+        <view class="comments-list-main">
+          <view class="comments-list-main-name">小乐</view>
+          <view class="comments-list-main-content">公司在旁边开会，开完会就在附近吃了，感觉比较高级的新疆餐厅，装修很舒服，尤其卡座沙发。服务员都是新疆人，餐的分量很小，但是味道还算不错，烤羊腿烤的外焦里嫩，总之还不错，适合小型聚会，价格有点小贵，还不错。</view>
+          <view class="comments-list-main-footer">
+            <text class="comments-list-main-footer-time">2天前</text>
+            <view class="comments-list-main-footer-handle">
+              <image class="comments-list-main-footer-handle-xin" src="../assets/img/xin_active.png"/>99+
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="comments-list">
+        <image class="comments-list-author" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/120/h/120"/>
+        <view class="comments-list-main">
+          <view class="comments-list-main-name">小乐</view>
+          <view class="comments-list-main-content">公司在旁边开会，开完会就在附近吃了，感觉比较高级的新疆餐厅，装修很舒服，尤其卡座沙发。服务员都是新疆人，餐的分量很小，但是味道还算不错，烤羊腿烤的外焦里嫩，总之还不错，适合小型聚会，价格有点小贵，还不错。</view>
+          <view class="comments-list-main-footer">
+            <text class="comments-list-main-footer-time">2天前</text>
+            <view class="comments-list-main-footer-handle">
+              <image class="comments-list-main-footer-handle-xin" src="../assets/img/xin_active.png"/>99+
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { getRecommend } from '@/store/actions'
+
+  import { connect } from 'wepy-redux'
+
+  @connect({
+    recommend (state) {
+      return state.recommend.recommend
+    }
+  }, {
+    getRecommend
+  })
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '达人推荐'
+    }
+    components = {
+    }
+    data = {
+    }
+
+    computed = {
+    }
+
+    methods = {
+      goToDetail (id) {
+        this.$root.$navigate('./article', {
+          id
+        })
+      }
+    }
+
+    events = {
+    }
+    async onLoad(params, data) {
+      await this.methods.getRecommend({
+        id: params.id
+      })
+    }
+  }
+</script>

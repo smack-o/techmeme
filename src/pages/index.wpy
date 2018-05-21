@@ -6,9 +6,10 @@
     border-bottom: 1px solid @ColorBorder;
     font-size: 18px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     span {
       display: block;
+      margin: 0 18px;
       color: @ColorGray;
       &.active {
         color: @ColorBlack;
@@ -22,6 +23,14 @@
     <view class="nav">
       <span @tap="onNavClick({{index}})" class="{{ index === navActive ? 'active' : '' }}" wx:for="{{navList}}" wx:key="{{index}}">{{navList[index]}}</span>
     </view>
+    <swiper
+      indicator-dots
+      bindchange="bindchangeTag"
+    >
+      <swiper-item wx:for="{{recommends}}" wx:key="{{index}}">
+        <image src="{{item.pictures[0].url}}"  @tap="goToRecommend({{item._id}})" class="slide-image"/>
+      </swiper-item>
+    </swiper>
     <view class="wrapper">
       <recommend :list.sync="list"></recommend>
     </view>
@@ -31,15 +40,19 @@
 <script>
   import wepy from 'wepy'
   import Recommend from '@/components/recommend'
-  import { getRestaurantList } from '@/store/actions'
+  import { getRestaurantList, getRecommendList } from '@/store/actions'
   import { connect } from 'wepy-redux'
 
   @connect({
     list (state) {
       return state.restaurant.list
+    },
+    recommends (state) {
+      return state.recommend.list
     }
   }, {
-    getRestaurantList
+    getRestaurantList,
+    getRecommendList
   })
 
   export default class Index extends wepy.page {
@@ -50,7 +63,7 @@
       recommend: Recommend
     }
     data = {
-      navList: ['编辑推荐', '城市攻略', '我的收藏'],
+      navList: ['编辑推荐', '城市攻略'],
       navActive: 0
     }
 
@@ -63,6 +76,12 @@
     methods = {
       onNavClick (index) {
         this.navActive = index
+      },
+      goToRecommend (id) {
+        this.$root.$navigate('./recommend', {
+          id,
+          type: 0
+        })
       }
     }
 
@@ -71,6 +90,7 @@
 
     onShow() {
       this.methods.getRestaurantList()
+      this.methods.getRecommendList()
     }
   }
 </script>

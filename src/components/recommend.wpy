@@ -81,21 +81,95 @@
     }
   }
 }
+
+.recommend{
+  .category {
+    height: 35px;
+    white-space: nowrap;
+    padding-top: 18px;
+    padding-bottom: 15px;
+    .category-item:first-child{
+      margin-left: 16px;
+    }
+    .category-item {
+      padding: 5px 10px;
+      color: #9B9B9B;
+      font-size: 11px;
+      margin-left: 5px;
+      background: #CFCCCC;
+      border-radius: 4px;
+    }
+    .category-item-active{
+      color: #000000
+    }
+  }
+  .product {
+    padding: 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .product-list{
+      width: 161px;
+      padding-bottom: 15px;
+      display: inline-block;
+      .product-list-box{
+        border-radius: 4px;
+        box-shadow: 0px 1px 6px #cccccc;
+        .product-list-image{
+          width: 161px;
+          height: 161px;
+          background: #cccccc;
+          border-top-left-radius: 4px;
+          border-top-right-radius: 4px;
+        }
+        .product-list-box-info{
+          padding: 4px;
+          box-sizing:border-box;
+        }
+        .product-list-name{
+          font-size: 14px;
+          color: #000000;
+          word-wrap: normal;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        .product-list-synopsis{
+          color: #9B9B9B;
+          font-size: 13px;
+          word-wrap: normal;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}
 </style>
 
 <template>
-  <view class="recommend-wrapper">
-    <swiper
-      indicator-dots
-      bindchange="bindchangeTag"
-    >
-      <block wx:for="{{list[0].list}}" wx:key="index">
-        <swiper-item>
-          <image src="{{item.pictures[0].url}}" class="slide-image"/>
-        </swiper-item>
-      </block>
-    </swiper>
-    <view class="moudles">
+  <view class="recommend">
+    <scroll-view class="category" scroll-x="true">
+      <repeat for="{{list}}" key="index" index="index" item="topic">
+        <text class="{{ index === topicActive ? 'category-item category-item-active' : 'category-item' }}" @tap="onTopicClick({{index}})">{{topic.name}}</text>
+      </repeat>
+    </scroll-view>
+
+    <view class="product" wx:if="{{list.length > 0 && list[topicActive].articles.length > 0}}">
+      <repeat for="{{list[topicActive].articles}}" key="articleIndex" index="articleIndex" item="article">
+        <view class="product-list" @tap="goToDetail({{article._id}})">
+          <view class="product-list-box">
+            <image class="product-list-image" src="{{article.pictures && article.pictures.length > 0 ? article.pictures[0].url : ''}}"/>
+            <view class="product-list-box-info">
+              <view class="product-list-name">{{article.name}}</view>
+              <view class="product-list-synopsis">{{article.subtitle}}</view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+    <!-- <view class="moudles">
       <view class="moudle" wx:for="{{list}}" wx:key="index" wx:for-item="content">
         <view class="moudle__title">
           <view class="moudle__title--left">{{content.name}}</view>
@@ -115,20 +189,18 @@
           </view>
         </view>
       </view>
-    </view>
+    </view> -->
   </view>
 </template>
 <script>
   import wepy from 'wepy'
-  // import { connect } from 'wepy-redux'
-  // @connect({
-  //   list (state) {
-  //     return state.restaurant.list
-  //   }
-  // })
   export default class Group extends wepy.component {
     props = {
       list: []
+    }
+
+    data = {
+      topicActive: 0
     }
 
     events = {
@@ -140,10 +212,13 @@
           id
         })
       },
-      goToTopic (id) {
-        this.$root.$navigate('./articles', {
-          id
-        })
+      // goToTopic (id) {
+      //   this.$root.$navigate('./articles', {
+      //     id
+      //   })
+      // },
+      onTopicClick (index) {
+        this.topicActive = index
       }
     }
   }
